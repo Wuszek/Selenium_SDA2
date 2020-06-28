@@ -2,6 +2,7 @@ package com.sda.Selenium_SDA2;
 
 import com.sda.Selenium_SDA2.page.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -105,19 +107,51 @@ public class AutomationPracticeTest {
     @Test
     @DisplayName("Zakładanie nowego konta")
     public void createNewAccount(){
+
+        String generatedPrefix = RandomStringUtils.randomAlphabetic(10);
+        String generatedSuffix = RandomStringUtils.randomAlphabetic(3);
+        String email = generatedPrefix + "@" + generatedSuffix + ".com";
+        String password = RandomStringUtils.randomAlphabetic(7);
+
         MyStorePage myStorePage = new MyStorePage(webDriver);
         myStorePage.signIn();
 
         LoginPage loginPage = new LoginPage(webDriver);
-        loginPage.emailCreate("test2@testowisko.pl");
+        loginPage.emailCreate(email);
         loginPage.createAccountButton();
 
         CreateAccountPage createAccountPage = new CreateAccountPage(webDriver);
+        createAccountPage.selectMr();
+        createAccountPage.personalFirstName("Mateosz");
+        createAccountPage.personalLastName("Kekosz");
+
+        assertEquals(email, createAccountPage.verifyEmail());
+
+        createAccountPage.enterPassword(password);
+        createAccountPage.selectDayOfBirthByValue("5");
+        createAccountPage.selectMonthsOfBirthByValue("7");
+        createAccountPage.selectYearOfBirthByValue("1990");
+
+        createAccountPage.verifyFirstName("Mateosz");
+        createAccountPage.verifyLastName("Kekosz");
+
+        createAccountPage.enterAddress("Kasztanowa 22");
+        createAccountPage.enterCity("Gedanensis");
+        createAccountPage.selectStateByValue("5");
+        createAccountPage.enterZipcode("80888");
+        createAccountPage.enterPhoneNumber("500501502");
+
+        createAccountPage.verifyAssignAddress("My address");
+
+        createAccountPage.registerButton();
+
+        MyAccountPage myAccountPage = new MyAccountPage(webDriver);
+        assertTrue(myAccountPage.isLoaded());
 
     }
 
     @Test
-    @DisplayName("Zakładanie nowego konta - nieudane")
+    @DisplayName("Zakładanie nowego konta - email już istnieje")
     public void createNewAccountError(){
         MyStorePage myStorePage = new MyStorePage(webDriver);
         myStorePage.signIn();
