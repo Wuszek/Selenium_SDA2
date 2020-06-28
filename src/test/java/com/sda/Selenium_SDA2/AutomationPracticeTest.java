@@ -1,9 +1,6 @@
 package com.sda.Selenium_SDA2;
 
-import com.sda.Selenium_SDA2.page.ForgotYourPasswordPage;
-import com.sda.Selenium_SDA2.page.LoginPage;
-import com.sda.Selenium_SDA2.page.MyAccountPage;
-import com.sda.Selenium_SDA2.page.MyStorePage;
+import com.sda.Selenium_SDA2.page.*;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -74,7 +71,7 @@ public class AutomationPracticeTest {
     }
 
     @Test
-    @DisplayName("Opcja przypomnij hasło")
+    @DisplayName("Opcja przypomnij hasło - zakończone pozytywnie")
     public void sendEmailToForgottenPassword(){
         MyStorePage myStorePage = new MyStorePage(webDriver);
         myStorePage.signIn();
@@ -88,4 +85,48 @@ public class AutomationPracticeTest {
 
         assertTrue(forgotYourPasswordPage.confirmationSentPositive());
     }
+
+    @Test
+    @DisplayName("Opcja przypomnij hasło - zły adres email")
+    public void sendEmailToForgottenPasswordNegative(){
+        MyStorePage myStorePage = new MyStorePage(webDriver);
+        myStorePage.signIn();
+
+        LoginPage loginPage = new LoginPage(webDriver);
+        loginPage.clickOnForgotYourPassword();
+
+        ForgotYourPasswordPage forgotYourPasswordPage = new ForgotYourPasswordPage(webDriver);
+        forgotYourPasswordPage.emailAddress("xxxx");
+        forgotYourPasswordPage.retrivePasswordButton();
+
+        assertTrue(forgotYourPasswordPage.confirmationSentNegative());
+    }
+
+    @Test
+    @DisplayName("Zakładanie nowego konta")
+    public void createNewAccount(){
+        MyStorePage myStorePage = new MyStorePage(webDriver);
+        myStorePage.signIn();
+
+        LoginPage loginPage = new LoginPage(webDriver);
+        loginPage.emailCreate("test2@testowisko.pl");
+        loginPage.createAccountButton();
+
+        CreateAccountPage createAccountPage = new CreateAccountPage(webDriver);
+
+    }
+
+    @Test
+    @DisplayName("Zakładanie nowego konta - nieudane")
+    public void createNewAccountError(){
+        MyStorePage myStorePage = new MyStorePage(webDriver);
+        myStorePage.signIn();
+
+        LoginPage loginPage = new LoginPage(webDriver);
+        loginPage.emailCreate("test@testowisko.pl");
+        loginPage.createAccountButton();
+
+        assertTrue(loginPage.createAccountError());
+    }
+
 }

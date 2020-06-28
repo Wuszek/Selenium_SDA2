@@ -16,7 +16,10 @@ public class ForgotYourPasswordPage {
     private WebElement retrivePasswordButton;
 
     @FindBy(xpath = "//div[@id='center_column']//p[@class='alert alert-success']")
-    private WebElement confirmationSent;
+    private WebElement confirmationSentPositive;
+
+    @FindBy(xpath = "/html//div[@id='center_column']//p[.='There is 1 error']")
+    private WebElement confirmationSentNegative;
 
     public ForgotYourPasswordPage(WebDriver webDriver){
         this.webDriver = webDriver;
@@ -32,6 +35,12 @@ public class ForgotYourPasswordPage {
     }
 
     public boolean confirmationSentPositive(){
-        return this.confirmationSent.isDisplayed();
+        return this.confirmationSentPositive.isDisplayed();
     }
+
+    public boolean confirmationSentNegative(){
+        return this.confirmationSentNegative.isDisplayed();
+    }
+
+
 }
