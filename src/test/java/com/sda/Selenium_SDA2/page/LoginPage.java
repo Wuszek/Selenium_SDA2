@@ -1,5 +1,6 @@
 package com.sda.Selenium_SDA2.page;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -42,6 +43,10 @@ public class LoginPage {
 
     public void signIn(){
         signInButton.click();
+    }
+
+    public boolean isAutentificationFailed(){
+        return this.webDriver.findElement(By.xpath("//div[@id='center_column']//ol/li[.='Authentication failed.']")).isDisplayed();
     }
 
 }

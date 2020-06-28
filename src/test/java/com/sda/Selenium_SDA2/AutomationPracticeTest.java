@@ -1,6 +1,8 @@
 package com.sda.Selenium_SDA2;
 
+import com.sda.Selenium_SDA2.page.ForgotYourPasswordPage;
 import com.sda.Selenium_SDA2.page.LoginPage;
+import com.sda.Selenium_SDA2.page.MyAccountPage;
 import com.sda.Selenium_SDA2.page.MyStorePage;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
@@ -44,7 +46,7 @@ public class AutomationPracticeTest {
 
     @Test
     @DisplayName("Logowanie na istniejącego użytkownika")
-    public void loginToPagePisitive(){
+    public void loginToPagePositive(){
         MyStorePage myStorePage = new MyStorePage(webDriver);
         myStorePage.signIn();
 
@@ -53,9 +55,37 @@ public class AutomationPracticeTest {
         loginPage.password("Test111");
         loginPage.signIn();
 
-
-
-
+        MyAccountPage myAccountPage = new MyAccountPage(webDriver);
+        assertTrue(myAccountPage.isLoaded());
     }
 
+    @Test
+    @DisplayName("Logowanie na nieistniejącego użytkownika")
+    public void loginToPageNegative(){
+        MyStorePage myStorePage = new MyStorePage(webDriver);
+        myStorePage.signIn();
+
+        LoginPage loginPage = new LoginPage(webDriver);
+        loginPage.email("test@testowisko.pl");
+        loginPage.password("Test1112");
+        loginPage.signIn();
+
+        assertTrue(loginPage.isAutentificationFailed());
+    }
+
+    @Test
+    @DisplayName("Opcja przypomnij hasło")
+    public void sendEmailToForgottenPassword(){
+        MyStorePage myStorePage = new MyStorePage(webDriver);
+        myStorePage.signIn();
+
+        LoginPage loginPage = new LoginPage(webDriver);
+        loginPage.clickOnForgotYourPassword();
+
+        ForgotYourPasswordPage forgotYourPasswordPage = new ForgotYourPasswordPage(webDriver);
+        forgotYourPasswordPage.emailAddress("test@testowisko.pl");
+        forgotYourPasswordPage.retrivePasswordButton();
+
+        assertTrue(forgotYourPasswordPage.confirmationSentPositive());
+    }
 }
