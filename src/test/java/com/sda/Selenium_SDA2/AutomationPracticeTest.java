@@ -1,17 +1,26 @@
 package com.sda.Selenium_SDA2;
 
+import com.sda.Selenium_SDA2.page.LoginPage;
+import com.sda.Selenium_SDA2.page.MyStorePage;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AutomationPracticeTest {
 
     private WebDriver webDriver;
+    public WebDriverWait wait;
 
     @BeforeAll
     public static void setUpClass(){
@@ -32,4 +41,21 @@ public class AutomationPracticeTest {
         // Zamknij przeglądarkę
         this.webDriver.quit();
     }
+
+    @Test
+    @DisplayName("Logowanie na istniejącego użytkownika")
+    public void loginToPagePisitive(){
+        MyStorePage myStorePage = new MyStorePage(webDriver);
+        myStorePage.signIn();
+
+        LoginPage loginPage = new LoginPage(webDriver);
+        loginPage.email("test@testowisko.pl");
+        loginPage.password("Test111");
+        loginPage.signIn();
+
+
+
+
+    }
+
 }
